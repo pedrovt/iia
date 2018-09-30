@@ -1,4 +1,4 @@
-# Guide 2, Functions to Process Lists and Tuples
+# Guide 1, Functions to Process Lists and Tuples
 #
 # Introduction to Artificial Intelligence
 # Pedro Teixeira, 84715, MIECT
