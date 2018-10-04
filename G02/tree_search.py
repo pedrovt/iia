@@ -59,7 +59,12 @@ class SearchNode:
         self.state = state
         self.parent = parent
         self.depth = depth
+        self.children = []
 
+    #TODO ex5
+    def addChildren(self, c):
+        self.children += c
+        
     #TODO Exercício 1
     def inParent(self, state):
         if (self.parent == None):
@@ -94,7 +99,7 @@ class SearchTree:
         return(path)
 
     # procurar a solucao
-    def search(self):
+    def search(self, limit=None):
         while self.open_nodes != []:
             
             node = self.open_nodes.pop(0)
@@ -106,7 +111,12 @@ class SearchTree:
                 newstate = self.problem.domain.result(node.state,a)
                 lnewnodes += [SearchNode(newstate, node, node.depth + 1)]
             #self.add_to_open(lnewnodes)
-            self.add_to_open([newNode for newNode in lnewnodes if not node.inParent(newNode.state)])   # filter the visited nodes (or using an if in the previous for statement)
+            children = [newNode for newNode in lnewnodes if not node.inParent(
+                newNode.state) and (newNode.depth < limit if limit else True)]
+            
+            node.addChildren(children)
+            self.add_to_open(children)
+            # filter the visited nodes (or using an if in the previous for statement). None is always false
 
         
         return None
