@@ -57,9 +57,10 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent): 
-        self.state = state
+    def __init__(self,state,parent,cost): 
+        self.state  = state
         self.parent = parent
+        self.cost   = cost	#*Exerc�cio 4
     def __str__(self):
         return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
@@ -81,7 +82,7 @@ class SearchTree:
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None)
+        root = SearchNode(problem.initial, None, 0)
         self.open_nodes = [root]
         self.strategy = strategy
 
@@ -102,7 +103,7 @@ class SearchTree:
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                lnewnodes += [SearchNode(newstate,node)]
+                lnewnodes += [SearchNode(newstate,node, self.problem.domain.cost(node.state, a) + node.cost)]
 
             #* Exercise 1 : only add nodes who are not parents of the current node
             self.add_to_open([nodes for nodes in lnewnodes if not node.inParent(nodes.state)]) 
