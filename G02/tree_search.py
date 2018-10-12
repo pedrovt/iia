@@ -9,7 +9,9 @@
 #    SearchTree    - arvore de pesquisa, com metodos para 
 #                    a respectiva construcao
 #
-#  (c) Luis Seabra Lopes, Introducao a Inteligencia Artificial, 2012-2014
+#  (c) Luis Seabra Lopes
+#  Introducao a Inteligencia Artificial, 2012-2018,
+#  Inteligência Artificial, 2014-2018
 
 from abc import ABC, abstractmethod
 
@@ -55,28 +57,11 @@ class SearchProblem:
 
 # Nos de uma arvore de pesquisa
 class SearchNode:
-    def __init__(self,state,parent, depth): 
+    def __init__(self,state,parent): 
         self.state = state
         self.parent = parent
-        self.depth = depth
-        self.children = []
-
-    #TODO ex5
-    def addChildren(self, c):
-        self.children += c
-        
-    #TODO Exercício 1
-    def inParent(self, state):
-        if (self.parent == None):
-            return False
-
-        if self.parent.state == state:
-            return True
-
-        return self.parent.inParent(state)
-
     def __str__(self):
-        return "no(" + str(self.state) + "," + str(self.parent) + "," + str(self.depth) + ")"
+        return "no(" + str(self.state) + "," + str(self.parent) + ")"
     def __repr__(self):
         return str(self)
 
@@ -86,7 +71,7 @@ class SearchTree:
     # construtor
     def __init__(self,problem, strategy='breadth'): 
         self.problem = problem
-        root = SearchNode(problem.initial, None, 0)
+        root = SearchNode(problem.initial, None)
         self.open_nodes = [root]
         self.strategy = strategy
 
@@ -99,26 +84,16 @@ class SearchTree:
         return(path)
 
     # procurar a solucao
-    def search(self, limit=None):
+    def search(self):
         while self.open_nodes != []:
-            
             node = self.open_nodes.pop(0)
-            print(node)
             if self.problem.goal_test(node.state):
                 return self.get_path(node)
             lnewnodes = []
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
-                lnewnodes += [SearchNode(newstate, node, node.depth + 1)]
-            #self.add_to_open(lnewnodes)
-            children = [newNode for newNode in lnewnodes if not node.inParent(
-                newNode.state) and (newNode.depth < limit if limit else True)]
-            
-            node.addChildren(children)
-            self.add_to_open(children)
-            # filter the visited nodes (or using an if in the previous for statement). None is always false
-
-        
+                lnewnodes += [SearchNode(newstate,node)]
+            self.add_to_open(lnewnodes)
         return None
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia
@@ -126,7 +101,7 @@ class SearchTree:
         if self.strategy == 'breadth':
             self.open_nodes.extend(lnewnodes)
         elif self.strategy == 'depth':
-            self.open_nodes[0:0] = lnewnodes
+            self.open_nodes[:0] = lnewnodes
         elif self.strategy == 'uniform':
             pass
 
