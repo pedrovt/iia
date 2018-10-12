@@ -29,9 +29,9 @@ class Cidades(SearchDomain):
         if C1==cidade:
             return C2
     
-    #* Exercício 2
+    #* Question 2
     def cost(self, state, action):
-        """Dado um estado e uma acção, devolve o respectivo custo de executar essa acção nesse estado"""
+        """Given a state and an action, it returns its cost of performing that action in that state."""
         src, dest = action
         if (state != src):
             return None 
