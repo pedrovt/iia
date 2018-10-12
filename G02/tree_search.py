@@ -115,6 +115,8 @@ class SearchTree:
             self.open_nodes.extend(lnewnodes)
         elif self.strategy == 'depth':
             self.open_nodes[:0] = lnewnodes
-        elif self.strategy == 'uniform':
+        elif self.strategy == 'uniform':    #* Exercício 4 (Uniform Tree Search)
+            # Add to the open_nodes list the lnewnodes and sort the result by cost
+            sorted(self.open_nodes + lnewnodes, key = lambda search_node : search_node.cost)
             pass
 
