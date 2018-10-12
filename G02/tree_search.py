@@ -65,6 +65,16 @@ class SearchNode:
     def __repr__(self):
         return str(self)
 
+    #* Exercise 1 : method to verify if a SearchNode with the given state is a parent of the current SearchNode
+    def inParent(self, state):
+        if (self.parent == None):
+            return False
+
+        if (self.parent.state == state):
+            return True
+        
+        return self.parent.inParent(state)
+
 # Arvores de pesquisa
 class SearchTree:
 
@@ -93,7 +103,9 @@ class SearchTree:
             for a in self.problem.domain.actions(node.state):
                 newstate = self.problem.domain.result(node.state,a)
                 lnewnodes += [SearchNode(newstate,node)]
-            self.add_to_open(lnewnodes)
+
+            #* Exercise 1 : only add nodes who are not parents of the current node
+            self.add_to_open([nodes for nodes in lnewnodes if not node.inParent(nodes.state)]) 
         return None
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia
