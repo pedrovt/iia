@@ -99,7 +99,7 @@ class SearchTree:
         return(path)
 
     # procurar a solucao
-    def search(self):
+    def search(self, limit=None):
         while self.open_nodes != []:
             node = self.open_nodes.pop(0)
             if self.problem.goal_test(node.state):
@@ -112,7 +112,8 @@ class SearchTree:
                 lnewnodes += [SearchNode(newstate,node, self.problem.domain.cost(node.state, a) + node.cost, node.depth + 1)]
 
             #* Question 1 : only add nodes who are not parents of the current node
-            self.add_to_open([nodes for nodes in lnewnodes if not node.inParent(nodes.state)]) 
+            #*! Question 8 : only add nodes with depth < limit (if limit exists)
+            self.add_to_open([nodes for nodes in lnewnodes if not node.inParent(nodes.state) and nodes.depth < limit if limit else True]) 
         return None
 
     # juntar novos nos a lista de nos abertos de acordo com a estrategia
