@@ -14,6 +14,7 @@ class Cidades(SearchDomain):
     def __init__(self,connections, coordinates):
         self.connections = connections
         self.coordinates = coordinates
+   
     def actions(self,cidade):
         actlist = []
         for (C1,C2,D) in self.connections:
@@ -22,12 +23,26 @@ class Cidades(SearchDomain):
             elif (C2==cidade):
                actlist += [(C2,C1)]
         return actlist 
+    
     def result(self,cidade,action):
         (C1,C2) = action
         if C1==cidade:
             return C2
+    
+    #* Exercício 2
     def cost(self, state, action):
-        pass
+        """Dado um estado e uma acção, devolve o respectivo custo de executar essa acção nesse estado"""
+        src, dest = action
+        if (state != src):
+            return None 
+
+        for (conn_src, conn_dest, conn_cost) in self.connections:      # For all connections
+            if ((conn_src == src and conn_dest == dest) or (conn_src == dest and conn_dest == src)):
+                return conn_cost
+
+        return None
+        #return connection[2] for connection in self.connections if (connection[0] == state or connection[1] == state)
+    
     def heuristic(self, state, goal_state):
         pass
 
