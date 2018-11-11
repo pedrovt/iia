@@ -133,7 +133,41 @@ class SemanticNetwork:
 
     # Exercise 8
     def get_local_assoc_user(self, entity):
-        return declaration.relation.name, declaration.user for declaration in self.query_local()
+        return [(declaration.relation.name, declaration.user) for declaration in self.query_local()]
+
+    # Exercise 9
+    def predecessor(self, entity_a, entity_b):
+        local_predecessors = [declaration.relation.entity2 for declaration in self.query_local(
+        ) if declaration.relation.name in ["member", "subtype"] and declaration.relation.entity1 == entity_b]
+        
+        if entity_a in local_predecessors:
+            return True
+        
+        return any([self.predecessor(entity_a, predecessor) for predecessor in local_predecessors])
+
+    # Exercise 10
+    def predecessor_path(self, entity_a, entity_b):
+        local_predecessors = [declaration.relation.entity2 for declaration in self.query_local(
+        ) if declaration.relation.name in ["member", "subtype"] and declaration.relation.entity1 == entity_b]
+
+        if local_predecessors is None:
+            return None
+
+        if entity_a in local_predecessors:
+            return [entity_a, entity_b]
+
+        path = [pred_path + [entity_b] for pred_path in \
+                [self.predecessor_path(entity_a, predecessor) for predecessor \
+                in local_predecessors] if pred_path != None]
+
+        return path[0] if path != [] else None
+
+    # Exercise 11
+    def query(self, entity1, relation):
+        local = [self.query(declaration.relation.entity2, relation) for declaration in self.declarations if declaration.relation.name in ["member", "subtype"] and declaration.relation.entity1 == entity1]
+
+        return [item for sublist in local for item in sublist] + [declaration for declaration in self.declarations if declaration.relation.entity1 == entity1 and declaration.relation.name == relation]
+    
 # Funcao auxiliar para converter para cadeias de caracteres
 # listas cujos elementos sejam convertiveis para
 # cadeias de caracteres

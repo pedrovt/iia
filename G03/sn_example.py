@@ -86,3 +86,8 @@ print("Get objects: " + str(z.get_objects()))
 print("Get users: "   + str(z.get_users()))
 print("Get types: "   + str(z.get_types()))
 print("Get local assoc names: "   + str(z.get_local_assoc_names()))
+print("Predecessor 1 (should be true): " + str(z.predecessor('vertebrado', 'socrates')))
+print("Predecessor 2 (should be false): " + str(z.predecessor('vertebrado', 'filosofo')))
+print("Predecessor 1 Path (should be ['vertebrado', 'mamifero', 'homem', 'socrates']): " + str(
+    z.predecessor_path('vertebrado', 'socrates')))
+print("Query: " + str(z.query('socrates', 'altura')))
