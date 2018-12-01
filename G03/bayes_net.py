@@ -24,6 +24,12 @@ class BayesNet:
                     prob*=(p if val else 1-p)
         return prob
 
+    # Probabilidade individual de uma dada 
+    # variavel da rede
+    def indProb(self, var, val):
+        prob = 0
+        #val in val for self.dependencias
+
 
 # Footnote 1:
 # Default arguments are evaluated on function definition,
